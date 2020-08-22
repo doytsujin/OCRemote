@@ -198,3 +198,9 @@ SharedPromise<std::monostate> ProviderME::extract(int size, size_t slot) {
   factory.s.enqueueAction(access.client, action);
   return action->mapTo(std::monostate{});
 }
+
+void AccessME::save(nlohmann::json &json) {
+  AccessInv::save(json);
+  json["me"] = me;
+  json["entry"] = entry;
+}

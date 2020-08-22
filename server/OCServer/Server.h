@@ -3,6 +3,7 @@
 #include <list>
 #include <boost/asio.hpp>
 #include <boost/noncopyable.hpp>
+#include <nlohmann/json.hpp>
 #include "Actions.h"
 
 struct Server;
@@ -52,6 +53,9 @@ struct Access {
   std::string client;
   Access(std::string client)
     :client(std::move(client)) {}
+  Access(const nlohmann::json &json)
+    :client(json.at("client").get<std::string>()) {}
+  void save(nlohmann::json &json);
 };
 
 struct Server {

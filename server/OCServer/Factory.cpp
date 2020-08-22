@@ -3,6 +3,21 @@
 #include "Factory.h"
 #include "WeakCallback.h"
 
+void AccessAddr::save(nlohmann::json &json) {
+  Access::save(json);
+  json["addr"] = addr;
+}
+
+void AccessBus::save(nlohmann::json &json) {
+  AccessAddr::save(json);
+  json["sideBus"] = sideBus;
+}
+
+void AccessInv::save(nlohmann::json &json) {
+  AccessBus::save(json);
+  json["sideInv"] = sideInv;
+}
+
 SharedPromise<std::monostate> Reservation::extract(size_t slot) const {
   std::vector<SharedPromise<std::monostate>> promises;
   for (auto &i : providers)

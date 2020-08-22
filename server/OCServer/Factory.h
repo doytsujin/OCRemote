@@ -11,18 +11,27 @@ struct AccessAddr : Access {
   std::string addr;
   AccessAddr(std::string client, std::string addr)
     :Access(std::move(client)), addr(std::move(addr)) {}
+  AccessAddr(const nlohmann::json &json)
+    :Access(json), addr(json.at("addr").get<std::string>()) {}
+  void save(nlohmann::json &json);
 };
 
 struct AccessBus : AccessAddr {
   int sideBus;
   AccessBus(std::string client, std::string addr, int sideBus)
     :AccessAddr(std::move(client), std::move(addr)), sideBus(sideBus) {}
+  AccessBus(const nlohmann::json &json)
+    :AccessAddr(json), sideBus(json.at("sideBus").get<int>()) {}
+  void save(nlohmann::json &json);
 };
 
 struct AccessInv : AccessBus {
   int sideInv;
   AccessInv(std::string client, std::string addr, int sideInv, int sideBus)
     :AccessBus(std::move(client), std::move(addr), sideBus), sideInv(sideInv) {}
+  AccessInv(const nlohmann::json &json)
+    :AccessBus(json), sideInv(json.at("sideInv").get<int>()) {}
+  void save(nlohmann::json &json);
 };
 
 struct Process {
@@ -141,7 +150,7 @@ private:
   void doBusUpdate();
   void scheduleBusUpdate();
 public:
-  void log(std::string msg, uint32_t color = 0xffffffu, double beep = -1.f);
+  void log(std::string msg, uint32_t color = 0xffffffu, double beep = -1.0);
   ItemInfo &getOrAddItemInfo(const SharedItem &item);
   SharedItem getItem(const ItemFilters::Base &filter);
   int getAvail(const SharedItem &item, bool allowBackup);
@@ -215,5 +224,6 @@ public:
   void addProcess(UniqueProcess process) { processes.emplace_back(std::move(process)); }
   void start();
 };
+using UniqueFactory = std::unique_ptr<Factory>;
 
 #endif

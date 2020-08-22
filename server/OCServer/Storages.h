@@ -45,6 +45,9 @@ struct AccessME : AccessInv {
   int entry;
   AccessME(std::string client, std::string addr, int sideInv, int sideBus, int entry, std::string me = "me_interface")
     :AccessInv(std::move(client), std::move(addr), sideInv, sideBus), me(std::move(me)), entry(entry) {}
+  AccessME(const nlohmann::json &json)
+    :AccessInv(json), me(json.at("me").get<std::string>()), entry(json.at("entry").get<int>()) {}
+  void save(nlohmann::json &json);
 };
 
 struct StorageME : Storage {

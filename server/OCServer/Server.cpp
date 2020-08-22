@@ -203,3 +203,7 @@ void Client::updateTimer() {
     }));
   }
 }
+
+void Access::save(nlohmann::json &json) {
+  json["client"] = client;
+}

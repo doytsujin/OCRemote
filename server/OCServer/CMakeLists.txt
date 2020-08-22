@@ -4,8 +4,8 @@ project(OCServer)
 FIND_PACKAGE(Boost REQUIRED)
 add_executable (OCServer Actions.cpp Actions.h Entry.cpp Factory.cpp Factory.h
   Item.cpp Item.h Overload.h Processes.cpp Processes.h Serialize.cpp Serialize.h
-  Server.cpp Server.h Storages.cpp Storages.h WeakCallback.h)
-target_include_directories(OCServer PRIVATE ${Boost_INCLUDE_DIR})
+  Server.cpp Server.h Storages.cpp Storages.h WeakCallback.h Config.h)
+target_include_directories(OCServer PRIVATE ${Boost_INCLUDE_DIR} ../json/include)
 
 IF (WIN32)
   add_definitions(-DBOOST_ALL_NO_LIB)
